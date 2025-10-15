@@ -8,7 +8,6 @@
     
     <style>
         .btndel {
-            /* Wir verwenden jetzt Bootstrap-Klassen, aber behalten eine benutzerdefinierte Klasse für den roten Rand */
             border-color: #dc3545; /* rot */
         }
     </style>
@@ -68,7 +67,7 @@
         const radioList = document.getElementById('radioList');
         // console.log(form, sender, url, btnSubmit, resetBtn, radioList);
         
-        // NEUE ELEMENTE FÜR WIEDERGABE
+        // ELEMENTE FÜR WIEDERGABE
         const audioPlayer = document.getElementById('audioPlayer');
         const nowPlaying = document.getElementById('nowPlaying'); 
 
@@ -123,7 +122,7 @@
                 const editBtn = document.createElement('button');
                 editBtn.textContent = 'Bearbeiten';
                 editBtn.type = 'button';
-                editBtn.classList = 'btn btn-outline-secondary btnBearb'; // Bootstrap-Klasse für Button-Design
+                editBtn.classList = 'btn btn-outline-secondary btnBearb';
                 editBtn.addEventListener('click', () => {
                     sender.value = radio.sender_Name;
                     url.value = radio.sender_Url;
@@ -139,7 +138,7 @@
                 const deleteBtn = document.createElement('button');
                 deleteBtn.textContent = 'Löschen';
                 deleteBtn.type = 'button';
-                deleteBtn.classList = 'btn btn-outline-danger btndel'; // Bootstrap-Klasse für roten Lösch-Button
+                deleteBtn.classList = 'btn btn-outline-danger btndel';
                 deleteBtn.addEventListener('click', () => {
                     if (confirm(`Wirklich: ${radio.sender_Name} löschen ?`)) {
                         radioSender.splice(index_id, 1);
@@ -177,14 +176,12 @@
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            const sender_Name = sender.value.trim(); // .trim() entfernt Leerzeichen an den Enden
+            const sender_Name = sender.value.trim();
             const sender_Url = url.value.trim();
             const index_id = parseInt(index.value);
             // console.log(sender_Name, sender_Url, index_id);
 
-            // ⚠️ Hinweis: Bootstrap hat eine eingebaute Validierung, aber diese JS-Prüfung ist auch gut.
             if (!sender_Name || !sender_Url) {
-                // In einer Bootstrap-App würde man hier Feedback-Klassen wie 'is-invalid' verwenden.
                 alert('Bitte Sender und Url ausfüllen!');
                 return;
             }
