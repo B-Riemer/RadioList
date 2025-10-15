@@ -43,6 +43,15 @@
             </form>
         </div>
 
+        <div class="mb-4">
+            <audio id="audioPlayer" controls class="w-100"></audio>
+            <p id="nowPlaying" class="text-center text-muted mt-2">Aktuell kein Sender ausgewählt.</p>
+            
+            <p class="mt-3 mb-0 text-center">
+                <span class="text-info me-2">Beispiel-Stream (zum Kopieren und Testen):</span>
+                <code class="text-success small">https://stream.radiohamburg.de/live/mp3-192/linkradiohamburg/</code>
+            </p>
+        </div>
         <ul id="radioList" class="list-group">
             </ul>
     </div>
@@ -58,6 +67,11 @@
         const resetBtn = document.getElementById('resetBtn');
         const radioList = document.getElementById('radioList');
         // console.log(form, sender, url, btnSubmit, resetBtn, radioList);
+        
+        // NEUE ELEMENTE FÜR WIEDERGABE
+        const audioPlayer = document.getElementById('audioPlayer');
+        const nowPlaying = document.getElementById('nowPlaying'); 
+
 
         // Fallback auf leeres array, wenn Localstorage leer ist
         let radioSender = JSON.parse(localStorage.getItem('RadioSender')) || [];
@@ -78,6 +92,32 @@
                 // 🌟 Button-Gruppe (Wrapper) 🌟
                 const buttonGroup = document.createElement('div');
                 buttonGroup.classList = 'btn-group btn-group-sm'; // btn-group-sm macht die Buttons kleiner
+
+                // Wiedergabe Button
+                const playBtn = document.createElement('button');
+                playBtn.textContent = '▶️ Start';
+                playBtn.type = 'button';
+                // btn-success für einen grünen Play-Button
+                playBtn.classList = 'btn btn-success playBtn'; 
+                playBtn.addEventListener('click', () => {
+                    // Wichtige Logik: Setze die Quelle des Audio-Players auf die URL des Senders
+                    audioPlayer.src = radio.sender_Url;
+                    
+                    // Starte die Wiedergabe
+                    // Die .play() Methode gibt ein Promise zurück, das wir für Fehlerbehandlung nutzen
+                    audioPlayer.play().then(() => {
+                        // Erfolgreich gestartet
+                        nowPlaying.textContent = `Aktuell: ${radio.sender_Name}`;
+                        console.log(`Starte Wiedergabe von: ${radio.sender_Name}`);
+                    }).catch(error => {
+                        // Fehler beim Starten (z.B. Autoplay-Blockierung im Browser)
+                        nowPlaying.textContent = `Fehler beim Starten von: ${radio.sender_Name} (Autoplay blockiert?)`;
+                        console.error('Wiedergabefehler:', error);
+                        alert(`Wiedergabe von ${radio.sender_Name} konnte nicht automatisch starten. Bitte manuell im Player starten.`);
+                    });
+                });
+                buttonGroup.appendChild(playBtn);
+                // Ende - Wiedergabe Button
 
                 // Edit Button
                 const editBtn = document.createElement('button');
@@ -163,9 +203,6 @@
         })
 
         renderRadio();
-        // Hier war ein kleiner Tippfehler in deinem Original-Code: 'btrnSubmit' -> 'btnSubmit'
-        // Das habe ich oben in der 'resetForm'-Funktion korrigiert.
-        // Außerdem wurde 'saveRadios' doppelt definiert, das habe ich entfernt.
     </script>
 
 </body>
